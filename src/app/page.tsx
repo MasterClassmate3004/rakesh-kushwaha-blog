@@ -1,15 +1,24 @@
 import { prisma } from "@/lib/prisma"
 import BlogCard from "@/components/BlogCard"
 import PageTransition from "@/components/PageTransition"
+import { connection } from 'next/server'
 
-// Force dynamic to always fetch the latest posts. In a real app we'd use ISR or cache tags.
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" }
-  })
+  // Official Next.js 15 pattern for dynamic rendering
+  await connection()
+
+  let posts: any[] = []
+  try {
+    posts = await prisma.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: "desc" }
+    })
+  } catch (error) {
+    console.error("Home page database connection failed during build/render:", error)
+    // Build stays alive even if DB is down
+  }
 
   return (
     <PageTransition>

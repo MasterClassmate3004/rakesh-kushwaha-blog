@@ -2,14 +2,24 @@ import PageTransition from "@/components/PageTransition"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AboutAuthorPage() {
-    // Fetch the admin user (author) to get their latest profile image
-    const author = await prisma.user.findFirst({
-        where: { role: "ADMIN" }
-    })
+    // Official Next.js 15 pattern to opt-out of static rendering
+    await connection()
+
+    let author = null
+    try {
+        // Fetch the admin user (author) to get their latest profile image
+        author = await prisma.user.findFirst({
+            where: { role: "ADMIN" }
+        })
+    } catch (error) {
+        console.error("Database connection failed during build/render:", error)
+        // This catch block prevents the build from crashing if DB is unavailable
+    }
 
     const name = author?.name || "Nitya Jain"
     const profileImage = (author as any)?.image || `https://api.dicebear.com/7.x/notionists/svg?seed=${name}&backgroundColor=b6e3f4`

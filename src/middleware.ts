@@ -2,6 +2,8 @@ import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
 
+// We initialize NextAuth with the config that DOES NOT contain bcrypt or prisma
+// this is the only way to satisfy Vercel Edge Runtime limits
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
