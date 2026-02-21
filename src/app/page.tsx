@@ -1,12 +1,19 @@
 import { prisma } from "@/lib/prisma"
-import BlogCard from "@/components/BlogCard"
 import PageTransition from "@/components/PageTransition"
+import HomeFeed from "@/components/HomeFeed"
+import LandingHero3D from "@/components/LandingHero3D"
+
+export const revalidate = 60
 
 export default async function HomePage() {
+  const now = new Date()
   let posts: any[] = []
   try {
     posts = await prisma.post.findMany({
-      where: { published: true },
+      where: {
+        published: true,
+        OR: [{ publishAt: null }, { publishAt: { lte: now } }],
+      } as any,
       orderBy: { createdAt: "desc" }
     })
   } catch (error) {
@@ -16,37 +23,24 @@ export default async function HomePage() {
 
   return (
     <PageTransition>
-      <div className="flex flex-col items-center mb-16 mt-8 text-center space-y-4">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 py-2">
-          Thoughts & Ideas
-        </h1>
-        <p className="text-muted max-w-2xl text-lg">
-          Exploring software engineering, design patterns, and building premium user experiences.
-        </p>
-      </div>
+      <LandingHero3D />
 
       {posts.length === 0 ? (
         <div className="text-center py-20 text-muted glass-card rounded-2xl">
           <p>No posts published yet. Check back soon!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {posts.map((post: any) => (
-            <BlogCard
-              key={post.id}
-              slug={post.slug}
-              title={post.title}
-              dateLabel={new Intl.DateTimeFormat("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-                timeZone: "UTC",
-              }).format(post.createdAt)}
-              excerpt={post.content.replace(/<[^>]+>/g, '').substring(0, 150) + "..."} // naive HTML stripping for excerpt
-              imageUrl={post.imageUrl}
-            />
-          ))}
-        </div>
+        <HomeFeed
+          posts={posts.map((post: any) => ({
+            id: post.id,
+            slug: post.slug,
+            title: post.title,
+            caption: post.caption,
+            content: post.content,
+            imageUrl: post.imageUrl,
+            createdAt: post.createdAt.toISOString(),
+          }))}
+        />
       )}
     </PageTransition>
   )

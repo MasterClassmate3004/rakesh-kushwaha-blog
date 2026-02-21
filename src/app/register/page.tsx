@@ -26,6 +26,7 @@ export default function RegisterPage() {
         setError("")
 
         const formData = new FormData(formRef.current)
+        const password = formData.get("password") as string
         const result = await register(formData)
 
         if (result?.error) {
@@ -35,7 +36,7 @@ export default function RegisterPage() {
             // Auto-login after registration
             const loginResult = await signIn("credentials", {
                 email: result.email,
-                password: result.password,
+                password,
                 redirect: false
             })
 

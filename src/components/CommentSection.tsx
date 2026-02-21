@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { addComment } from "@/app/actions/comments"
+import { addAuthorReply, addComment } from "@/app/actions/comments"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSession } from "next-auth/react"
+import { formatDateTimeDDMMYYYY } from "@/lib/date"
 
 interface Comment {
     id: string
@@ -13,6 +14,7 @@ interface Comment {
         name: string | null
         image?: string | null
     }
+    replies?: Comment[]
 }
 
 interface CommentSectionProps {
@@ -22,9 +24,13 @@ interface CommentSectionProps {
 
 export default function CommentSection({ postId, comments }: CommentSectionProps) {
     const { data: session } = useSession()
+    const isAuthor = (session?.user as any)?.role === "ADMIN"
     const [text, setText] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [message, setMessage] = useState("")
+    const [replyByComment, setReplyByComment] = useState<Record<string, string>>({})
+    const [isReplying, setIsReplying] = useState<Record<string, boolean>>({})
+    const [replyMessage, setReplyMessage] = useState<Record<string, string>>({})
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -40,6 +46,25 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
             setText("")
         }
         setIsSubmitting(false)
+    }
+
+    const handleReply = async (commentId: string, e: React.FormEvent) => {
+        e.preventDefault()
+        const replyText = (replyByComment[commentId] || "").trim()
+        if (!replyText) return
+
+        setIsReplying((prev) => ({ ...prev, [commentId]: true }))
+        setReplyMessage((prev) => ({ ...prev, [commentId]: "" }))
+
+        const result = await addAuthorReply(commentId, replyText)
+        if (result.error) {
+            setReplyMessage((prev) => ({ ...prev, [commentId]: result.error as string }))
+        } else {
+            setReplyByComment((prev) => ({ ...prev, [commentId]: "" }))
+            setReplyMessage((prev) => ({ ...prev, [commentId]: "Reply posted." }))
+        }
+
+        setIsReplying((prev) => ({ ...prev, [commentId]: false }))
     }
 
     return (
@@ -101,12 +126,51 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
                                                 {comment.author.name || "Anonymous"}
                                             </span>
                                             <span className="text-xs text-muted block" suppressHydrationWarning>
-                                                {new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(comment.createdAt))}
+                                                {formatDateTimeDDMMYYYY(comment.createdAt)}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <p className="text-neutral-300 leading-relaxed pl-13">{comment.text}</p>
+
+                                {comment.replies && comment.replies.length > 0 && (
+                                    <div className="mt-4 ml-6 space-y-3 border-l border-white/10 pl-4">
+                                        {comment.replies.map((reply) => (
+                                            <div key={reply.id} className="bg-white/5 rounded-xl p-4 border border-white/10">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">
+                                                        {reply.author.name || "Author"}
+                                                    </span>
+                                                    <span className="text-xs text-muted" suppressHydrationWarning>
+                                                        {formatDateTimeDDMMYYYY(reply.createdAt)}
+                                                    </span>
+                                                </div>
+                                                <p className="text-neutral-300 text-sm leading-relaxed">{reply.text}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {isAuthor && (
+                                    <form onSubmit={(e) => handleReply(comment.id, e)} className="mt-4 ml-6 border-l border-primary/30 pl-4">
+                                        <textarea
+                                            value={replyByComment[comment.id] || ""}
+                                            onChange={(e) => setReplyByComment((prev) => ({ ...prev, [comment.id]: e.target.value }))}
+                                            placeholder="Write an author reply..."
+                                            className="w-full bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[70px] resize-y mb-2 text-sm"
+                                        />
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs text-green-400">{replyMessage[comment.id] || ""}</span>
+                                            <button
+                                                type="submit"
+                                                disabled={isReplying[comment.id]}
+                                                className="bg-primary/90 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-primary transition-colors disabled:opacity-50"
+                                            >
+                                                {isReplying[comment.id] ? "Posting..." : "Post Reply"}
+                                            </button>
+                                        </div>
+                                    </form>
+                                )}
                             </motion.div>
                         ))
                     )}

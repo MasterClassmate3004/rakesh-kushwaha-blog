@@ -2,8 +2,10 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { Edit2, LayoutDashboard } from "lucide-react"
 import DeletePostButton from "@/components/DeletePostButton"
+import { formatDateDDMMYYYY } from "@/lib/date"
 
 export default async function AdminDashboard() {
+    const now = new Date()
     const posts = await prisma.post.findMany({
         orderBy: { createdAt: "desc" },
         include: {
@@ -16,6 +18,7 @@ export default async function AdminDashboard() {
     // Quick stats
     const totalPosts = posts.length
     const publishedPosts = posts.filter((p: any) => p.published).length
+    const scheduledPosts = posts.filter((p: any) => p.published && p.publishAt && new Date(p.publishAt) > now).length
     const totalComments = posts.reduce((acc: number, p: any) => acc + p._count.comments, 0)
 
     return (
@@ -25,7 +28,7 @@ export default async function AdminDashboard() {
                 <h1 className="text-3xl font-extrabold tracking-tight">Dashboard</h1>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                 <div className="glass-card p-6 rounded-2xl border-l-4 border-l-primary">
                     <p className="text-muted text-sm font-medium">Total Posts</p>
                     <p className="text-4xl font-bold mt-2">{totalPosts}</p>
@@ -35,6 +38,10 @@ export default async function AdminDashboard() {
                     <p className="text-4xl font-bold mt-2">{publishedPosts}</p>
                 </div>
                 <div className="glass-card p-6 rounded-2xl border-l-4 border-l-purple-500">
+                    <p className="text-muted text-sm font-medium">Scheduled</p>
+                    <p className="text-4xl font-bold mt-2">{scheduledPosts}</p>
+                </div>
+                <div className="glass-card p-6 rounded-2xl border-l-4 border-l-fuchsia-500">
                     <p className="text-muted text-sm font-medium">Total Comments</p>
                     <p className="text-4xl font-bold mt-2">{totalComments}</p>
                 </div>
@@ -55,12 +62,17 @@ export default async function AdminDashboard() {
                             <tr key={post.id} className="hover:bg-white/5 transition-colors">
                                 <td className="px-6 py-4 font-medium max-w-[200px] truncate">{post.title}</td>
                                 <td className="px-6 py-4">
-                                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${post.published ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-500'}`}>
-                                        {post.published ? 'Published' : 'Draft'}
+                                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${post.published
+                                        ? (post.publishAt && new Date(post.publishAt) > now ? 'bg-blue-500/20 text-blue-300' : 'bg-green-500/20 text-green-400')
+                                        : 'bg-yellow-500/20 text-yellow-500'
+                                        }`}>
+                                        {post.published
+                                            ? (post.publishAt && new Date(post.publishAt) > now ? 'Scheduled' : 'Published')
+                                            : 'Draft'}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 text-sm text-neutral-400">
-                                    {new Intl.DateTimeFormat('en-US').format(post.createdAt)}
+                                    {formatDateDDMMYYYY(post.createdAt, true)}
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center space-x-4">

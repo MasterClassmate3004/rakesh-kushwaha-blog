@@ -22,10 +22,12 @@ model User {
 model Post {
   id        String    @id @default(cuid())
   title     String
+  caption   String?
   slug      String    @unique
   content   String
   imageUrl  String?
   published Boolean   @default(false)
+  publishAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   comments  Comment[]
@@ -37,8 +39,11 @@ model Comment {
   status    String   @default("PENDING")
   postId    String
   authorId  String
+  parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
 }

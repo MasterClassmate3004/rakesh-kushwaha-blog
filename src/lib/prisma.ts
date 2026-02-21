@@ -7,7 +7,8 @@ const prismaClientSingleton = () => {
 }
 
 declare global {
-    let prisma: undefined | ReturnType<typeof prismaClientSingleton>
+    // eslint-disable-next-line no-var
+    var prisma: undefined | ReturnType<typeof prismaClientSingleton>
 }
 
 export const prisma = globalThis.prisma ?? prismaClientSingleton()
