@@ -2,14 +2,8 @@ import PageTransition from "@/components/PageTransition"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
-import { connection } from 'next/server'
-
-export const dynamic = 'force-dynamic'
 
 export default async function AboutAuthorPage() {
-    // Official Next.js 15 pattern to opt-out of static rendering
-    await connection()
-
     let author = null
     try {
         // Fetch the admin user (author) to get their latest profile image

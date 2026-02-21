@@ -4,15 +4,14 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 
 interface BlogCardProps {
-    id: string
     slug: string
     title: string
-    date: Date
+    dateLabel: string
     excerpt: string
     imageUrl?: string | null
 }
 
-export default function BlogCard({ id, slug, title, date, excerpt, imageUrl }: BlogCardProps) {
+export default function BlogCard({ slug, title, dateLabel, excerpt, imageUrl }: BlogCardProps) {
     return (
         <motion.div
             whileHover={{ scale: 1.02 }}
@@ -31,7 +30,7 @@ export default function BlogCard({ id, slug, title, date, excerpt, imageUrl }: B
                 )}
                 <div className="p-6">
                     <p className="text-sm text-primary mb-2 font-medium tracking-wide">
-                        {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(date))}
+                        {dateLabel}
                     </p>
                     <h2 className="text-2xl font-bold mb-3 liquid-text">
                         {title}

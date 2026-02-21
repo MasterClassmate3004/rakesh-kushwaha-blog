@@ -1,14 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import BlogCard from "@/components/BlogCard"
 import PageTransition from "@/components/PageTransition"
-import { connection } from 'next/server'
-
-export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  // Official Next.js 15 pattern for dynamic rendering
-  await connection()
-
   let posts: any[] = []
   try {
     posts = await prisma.post.findMany({
@@ -40,10 +34,14 @@ export default async function HomePage() {
           {posts.map((post: any) => (
             <BlogCard
               key={post.id}
-              id={post.id}
               slug={post.slug}
               title={post.title}
-              date={post.createdAt}
+              dateLabel={new Intl.DateTimeFormat("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+                timeZone: "UTC",
+              }).format(post.createdAt)}
               excerpt={post.content.replace(/<[^>]+>/g, '').substring(0, 150) + "..."} // naive HTML stripping for excerpt
               imageUrl={post.imageUrl}
             />

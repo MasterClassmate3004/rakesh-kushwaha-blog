@@ -5,8 +5,6 @@ import CommentSection from "@/components/CommentSection"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
-export const dynamic = 'force-dynamic'
-
 export default async function BlogPostPage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
     const post = await prisma.post.findFirst({
