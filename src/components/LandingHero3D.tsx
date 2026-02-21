@@ -1,31 +1,25 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 
 export default function LandingHero3D() {
-    const { scrollY } = useScroll()
-    const y = useTransform(scrollY, [0, 320], [0, 60])
-    const rotateX = useTransform(scrollY, [0, 320], [0, 8])
-    const opacity = useTransform(scrollY, [0, 260], [1, 0.72])
-
     return (
-        <motion.section
-            style={{
-                y,
-                rotateX,
-                opacity,
-                transformPerspective: 1100,
-                transformOrigin: "center top",
-            }}
-            className="flex flex-col items-center mb-16 mt-8 text-center space-y-4"
-        >
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 py-2">
-                Thoughts & Ideas
-            </h1>
-            <p className="text-muted max-w-2xl text-lg">
-                Exploring software engineering, design patterns, and building premium user experiences.
-            </p>
-        </motion.section>
+        <section className="relative h-[170px] md:h-[210px] mt-1 md:mt-2 mb-1 md:mb-2">
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="fixed top-20 md:top-24 left-0 right-0 z-40 pointer-events-none"
+            >
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-1 pb-3 md:pb-4 flex flex-col items-center text-center space-y-2 md:space-y-3 bg-gradient-to-b from-black via-black/95 to-transparent">
+                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 py-2">
+                        Thoughts & Ideas
+                    </h1>
+                    <p className="text-muted max-w-2xl text-base md:text-lg">
+                        Exploring software engineering, design patterns, and building premium user experiences.
+                    </p>
+                </div>
+            </motion.div>
+        </section>
     )
 }
-

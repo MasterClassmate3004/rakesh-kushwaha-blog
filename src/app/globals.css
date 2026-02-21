@@ -61,6 +61,39 @@
     /* Slow, fluid flow when mouse enters */
     transition: background-position 1.2s cubic-bezier(0.65, 0, 0.35, 1);
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .month-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(41, 151, 255, 0.75) rgba(255, 255, 255, 0.08);
+  }
+
+  .month-scrollbar::-webkit-scrollbar {
+    height: 9px;
+  }
+
+  .month-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+  }
+
+  .month-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, rgba(41, 151, 255, 0.75), rgba(110, 193, 255, 0.85));
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+  }
+
+  .month-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, rgba(41, 151, 255, 0.95), rgba(110, 193, 255, 1));
+  }
 }
 
 .post-content .post-heading {

@@ -64,6 +64,10 @@ export async function savePost(data: { id?: string, title: string, caption?: str
 
     let normalizedImageUrl = data.imageUrl?.trim()
 
+    if (!normalizedImageUrl) {
+        throw new Error("Cover image is required")
+    }
+
     if (normalizedImageUrl) {
         if (normalizedImageUrl.startsWith("data:")) {
             const match = normalizedImageUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=]+)$/)

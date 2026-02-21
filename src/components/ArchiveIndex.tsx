@@ -51,8 +51,8 @@ export default function ArchiveIndex({ posts }: { posts: ArchivePost[] }) {
     }, [filtered])
 
     return (
-        <div className="space-y-8">
-            <section className="glass-card rounded-3xl p-5 md:p-6 border border-white/10 sticky top-20 z-20">
+        <div className="space-y-6 md:space-y-8">
+            <section className="glass-card rounded-3xl p-4 md:p-6 border border-white/10 md:sticky md:top-20 z-20">
                 <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
                     <Search className="w-4 h-4 text-primary" />
                     <input
@@ -76,7 +76,7 @@ export default function ArchiveIndex({ posts }: { posts: ArchivePost[] }) {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-60px" }}
                             transition={{ delay: groupIndex * 0.03 }}
-                            className="glass-card rounded-3xl p-5 md:p-6 border border-white/10"
+                            className="glass-card rounded-3xl p-4 md:p-6 border border-white/10"
                         >
                             <div className="flex items-center gap-2 mb-4">
                                 <CalendarDays className="w-4 h-4 text-primary" />
@@ -88,10 +88,10 @@ export default function ArchiveIndex({ posts }: { posts: ArchivePost[] }) {
                                     <Link
                                         key={post.id}
                                         href={`/blog/${post.slug}`}
-                                        className="py-3 flex items-start justify-between gap-4 hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors"
+                                        className="py-3 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4 hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors"
                                     >
-                                        <p className="text-sm md:text-base text-white/95">{post.title}</p>
-                                        <span className="text-xs md:text-sm text-sky-300 shrink-0 pt-0.5">
+                                        <p className="text-sm md:text-base text-white/95 min-w-0 break-words">{post.title}</p>
+                                        <span className="text-xs md:text-sm text-sky-300 shrink-0 sm:pt-0.5">
                                             {formatDateLabel(post.createdAt)}
                                         </span>
                                     </Link>

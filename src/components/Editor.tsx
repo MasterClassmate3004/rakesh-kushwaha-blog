@@ -125,6 +125,10 @@ export default function Editor({ initialData }: EditorProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (!imageUrl.trim()) {
+            alert("Cover image is required.")
+            return
+        }
         setIsSaving(true)
 
         await savePost({
@@ -184,7 +188,7 @@ export default function Editor({ initialData }: EditorProps) {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted mb-2">Cover Image (Optional)</label>
+                    <label className="block text-sm font-medium text-muted mb-2">Cover Image (Required)</label>
                     <input
                         type="file"
                         accept="image/*"
@@ -217,6 +221,9 @@ export default function Editor({ initialData }: EditorProps) {
                             </div>
                         )}
                     </div>
+                    {!imageUrl && (
+                        <p className="text-xs text-amber-300 mt-2">Please upload a cover image before publishing.</p>
+                    )}
                 </div>
 
                 <div>
