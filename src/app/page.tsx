@@ -39,6 +39,7 @@ export default async function HomePage() {
             content: post.content,
             imageUrl: post.imageUrl,
             createdAt: post.createdAt.toISOString(),
+            updatedAt: post.updatedAt.toISOString(),
           }))}
         />
       )}

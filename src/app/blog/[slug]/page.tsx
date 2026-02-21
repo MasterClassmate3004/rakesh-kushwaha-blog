@@ -103,6 +103,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                                     dateLabel={formatDateDDMMYYYY(rec.createdAt, true)}
                                     caption={rec.caption || rec.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) + "..."}
                                     imageUrl={rec.imageUrl}
+                                    imageVersion={rec.updatedAt?.toISOString?.() ?? String(rec.updatedAt ?? "")}
                                 />
                             ))}
                         </div>

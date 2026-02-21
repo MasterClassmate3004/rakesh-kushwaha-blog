@@ -14,6 +14,7 @@ type FeedPost = {
     content: string
     imageUrl?: string | null
     createdAt: string
+    updatedAt?: string
 }
 
 function formatDateLabel(createdAt: string) {
@@ -168,6 +169,7 @@ export default function HomeFeed({ posts }: { posts: FeedPost[] }) {
                                                     dateLabel={formatDateLabel(post.createdAt)}
                                                     caption={post.caption}
                                                     imageUrl={post.imageUrl}
+                                                    imageVersion={post.updatedAt}
                                                 />
                                             </div>
                                         ))}

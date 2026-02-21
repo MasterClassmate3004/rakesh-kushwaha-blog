@@ -9,9 +9,14 @@ interface BlogCardProps {
     dateLabel: string
     caption?: string | null
     imageUrl?: string | null
+    imageVersion?: string
 }
 
-export default function BlogCard({ slug, title, dateLabel, caption, imageUrl }: BlogCardProps) {
+export default function BlogCard({ slug, title, dateLabel, caption, imageUrl, imageVersion }: BlogCardProps) {
+    const resolvedImageUrl = imageUrl?.startsWith("http")
+        ? `${imageUrl}${imageUrl.includes("?") ? "&" : "?"}v=${encodeURIComponent(imageVersion || "")}`
+        : imageUrl
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 22, rotateX: 10, scale: 0.98 }}
@@ -24,10 +29,10 @@ export default function BlogCard({ slug, title, dateLabel, caption, imageUrl }: 
             className="glass-card rounded-2xl overflow-hidden cursor-pointer group"
         >
             <Link href={`/blog/${slug}`} className="block h-full">
-                {imageUrl && (
+                {resolvedImageUrl && (
                     <div className="w-full h-48 overflow-hidden bg-white/5">
                         <motion.img
-                            src={imageUrl}
+                            src={resolvedImageUrl}
                             alt={title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
