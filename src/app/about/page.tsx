@@ -3,6 +3,8 @@ import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AboutAuthorPage() {
     // Fetch the admin user (author) to get their latest profile image
     const author = await prisma.user.findFirst({
