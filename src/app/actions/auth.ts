@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma"
 import * as bcrypt from "bcryptjs"
-import { redirect } from "next/navigation"
 
 export async function register(formData: FormData) {
     const name = formData.get("name") as string

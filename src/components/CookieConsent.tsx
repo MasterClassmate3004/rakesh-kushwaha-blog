@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Cookie, X, Check } from "lucide-react"
+import { Cookie, Check } from "lucide-react"
 
 export default function CookieConsent() {
     const [isVisible, setIsVisible] = useState(false)

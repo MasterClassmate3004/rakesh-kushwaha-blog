@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
-import { useSession, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 
 export default function NavBar() {
     const pathname = usePathname()

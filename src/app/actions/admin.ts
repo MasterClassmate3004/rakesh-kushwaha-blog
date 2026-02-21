@@ -3,7 +3,6 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 
 async function requireAdmin() {
     const session = await auth()
