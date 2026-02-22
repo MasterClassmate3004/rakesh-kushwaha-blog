@@ -11,8 +11,8 @@ export default function LandingHero3D() {
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="fixed top-20 md:top-24 left-0 right-0 z-40 pointer-events-none"
             >
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-1 pb-3 md:pb-4 flex flex-col items-center text-center space-y-2 md:space-y-3 bg-gradient-to-b from-black via-black/95 to-transparent">
-                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 py-2">
+                <div className="hero-overlay max-w-4xl mx-auto px-4 sm:px-6 pt-1 pb-3 md:pb-4 flex flex-col items-center text-center space-y-2 md:space-y-3">
+                    <h1 className="hero-title text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent py-2">
                         Thoughts & Ideas
                     </h1>
                     <p className="text-muted max-w-2xl text-base md:text-lg">

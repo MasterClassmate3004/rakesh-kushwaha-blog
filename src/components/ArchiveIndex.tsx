@@ -60,7 +60,7 @@ export default function ArchiveIndex({ posts }: { posts: ArchivePost[] }) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search blog titles..."
-                        className="w-full bg-transparent text-white placeholder:text-white/40 focus:outline-none text-sm"
+                        className="w-full bg-transparent text-foreground placeholder:text-muted focus:outline-none text-sm"
                     />
                 </div>
             </section>
@@ -90,7 +90,7 @@ export default function ArchiveIndex({ posts }: { posts: ArchivePost[] }) {
                                         href={`/blog/${post.slug}`}
                                         className="py-3 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4 hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors"
                                     >
-                                        <p className="text-sm md:text-base text-white/95 min-w-0 break-words">{post.title}</p>
+                                        <p className="text-sm md:text-base text-foreground min-w-0 break-words">{post.title}</p>
                                         <span className="text-xs md:text-sm text-sky-300 shrink-0 sm:pt-0.5">
                                             {formatDateLabel(post.createdAt)}
                                         </span>

@@ -122,19 +122,20 @@
 }
 
 .light .text-white,
+.light .text-white\/95,
 .light .text-white\/90,
 .light .text-white\/80,
 .light .text-white\/70,
 .light .text-white\/60,
 .light .text-neutral-300,
 .light .text-neutral-400 {
-  color: #0f172a !important;
+  color: #0f172a;
 }
 
 .light .text-muted,
 .light .text-white\/45,
 .light .text-white\/40 {
-  color: #4b5563 !important;
+  color: #4b5563;
 }
 
 .light .bg-black\/90,
@@ -143,22 +144,108 @@
 .light .bg-black\/50,
 .light .bg-black\/40,
 .light .bg-black\/20 {
-  background-color: rgba(255, 255, 255, 0.75) !important;
+  background-color: rgba(255, 255, 255, 0.78);
 }
 
 .light .border-white\/10,
 .light .border-white\/15,
 .light .border-white\/5 {
-  border-color: rgba(15, 23, 42, 0.12) !important;
+  border-color: rgba(15, 23, 42, 0.12);
 }
 
 .light .liquid-text {
-  background: linear-gradient(90deg,
-      #2997ff 0%,
-      #2997ff 40%,
-      #0f172a 60%,
-      #0f172a 100%);
-  background-size: 250% 100%;
+  background: none;
+  -webkit-text-fill-color: #0f172a;
+  color: #0f172a;
+}
+
+.hero-overlay {
+  background: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.95) 60%, rgba(0, 0, 0, 0) 100%);
+}
+
+.hero-title {
+  background-image: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.6));
+}
+
+.light .hero-overlay {
+  background: linear-gradient(to bottom, #f7f9fc 0%, rgba(247, 249, 252, 0.95) 60%, rgba(247, 249, 252, 0) 100%);
+}
+
+.light .hero-title {
+  background-image: linear-gradient(to right, #0f172a, #374151);
+}
+
+.light .text-sky-300 {
+  color: #1976d2;
+}
+
+.light .post-content {
+  color: #1f2937;
+}
+
+.light .post-content.prose-invert {
+  --tw-prose-body: #374151;
+  --tw-prose-headings: #0f172a;
+  --tw-prose-lead: #4b5563;
+  --tw-prose-links: #1d4ed8;
+  --tw-prose-bold: #0f172a;
+  --tw-prose-counters: #4b5563;
+  --tw-prose-bullets: #9ca3af;
+  --tw-prose-hr: rgba(15, 23, 42, 0.2);
+  --tw-prose-quotes: #1f2937;
+  --tw-prose-quote-borders: rgba(41, 151, 255, 0.35);
+  --tw-prose-captions: #4b5563;
+  --tw-prose-code: #0f172a;
+  --tw-prose-pre-code: #e5e7eb;
+  --tw-prose-pre-bg: #111827;
+  --tw-prose-th-borders: rgba(15, 23, 42, 0.2);
+  --tw-prose-td-borders: rgba(15, 23, 42, 0.14);
+}
+
+.light .post-content p,
+.light .post-content li,
+.light .post-content blockquote,
+.light .post-content span {
+  color: inherit;
+}
+
+.light .post-content .post-heading {
+  color: #0f172a;
+}
+
+.light .post-content .post-subheading {
+  color: #1e3a8a;
+}
+
+.light .post-content .post-body {
+  color: #374151;
+}
+
+.light .post-content .post-quote {
+  background: linear-gradient(90deg, rgba(41, 151, 255, 0.16), rgba(41, 151, 255, 0.02));
+  color: #1f2937;
+}
+
+.light .post-content .post-list,
+.light .post-content .post-list-ordered {
+  color: #374151;
+}
+
+.light .post-content .post-callout {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+.light .post-content .post-divider {
+  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.25), transparent);
+}
+
+.light .post-content .post-font-mono {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.light .post-content .post-color-blue {
+  color: #1565c0;
 }
 
 .post-content .post-heading {
