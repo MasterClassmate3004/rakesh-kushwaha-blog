@@ -7,6 +7,54 @@ import { ArrowLeft } from "lucide-react"
 import { sanitizeHtml } from "@/lib/sanitize"
 import BlogCard from "@/components/BlogCard"
 import { formatDateDDMMYYYY } from "@/lib/date"
+import type { Metadata } from "next"
+import { siteConfig } from "@/lib/site"
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const params = await props.params
+    const post = await prisma.post.findUnique({
+        where: { slug: params.slug },
+        select: {
+            title: true,
+            caption: true,
+            content: true,
+            imageUrl: true,
+            published: true,
+        },
+    })
+
+    if (!post || !post.published) {
+        return {
+            title: "Post",
+        }
+    }
+
+    const description =
+        post.caption ||
+        post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160)
+
+    const url = `${siteConfig.siteUrl}/blog/${params.slug}`
+    return {
+        title: post.title,
+        description,
+        alternates: {
+            canonical: `/blog/${params.slug}`,
+        },
+        openGraph: {
+            title: post.title,
+            description,
+            type: "article",
+            url,
+            images: post.imageUrl ? [{ url: post.imageUrl }] : undefined,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.title,
+            description,
+            images: post.imageUrl ? [post.imageUrl] : undefined,
+        },
+    }
+}
 
 export default async function BlogPostPage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
@@ -78,7 +126,14 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                     )}
                     {post.imageUrl && (
                         <div className="w-full h-64 md:h-96 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
-                            <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
+                            <img
+                                src={post.imageUrl}
+                                alt={post.title}
+                                loading="eager"
+                                fetchPriority="high"
+                                decoding="async"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                     )}
                 </header>

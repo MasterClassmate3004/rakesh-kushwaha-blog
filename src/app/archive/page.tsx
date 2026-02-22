@@ -1,6 +1,15 @@
 import { prisma } from "@/lib/prisma"
 import PageTransition from "@/components/PageTransition"
 import ArchiveIndex from "@/components/ArchiveIndex"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: "Archive",
+    description: "Browse all published posts month by month.",
+    alternates: {
+        canonical: "/archive",
+    },
+}
 
 export const revalidate = 60
 
@@ -46,4 +55,3 @@ export default async function ArchivePage() {
         </PageTransition>
     )
 }
-

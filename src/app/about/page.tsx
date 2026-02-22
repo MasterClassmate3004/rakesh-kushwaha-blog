@@ -2,6 +2,16 @@ import PageTransition from "@/components/PageTransition"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import type { Metadata } from "next"
+import { siteConfig } from "@/lib/site"
+
+export const metadata: Metadata = {
+    title: `${siteConfig.authorName} - About`,
+    description: `Learn about ${siteConfig.authorName} and the story behind ${siteConfig.shortName}.`,
+    alternates: {
+        canonical: "/about",
+    },
+}
 
 export default async function AboutAuthorPage() {
     let author = null
@@ -31,6 +41,8 @@ export default async function AboutAuthorPage() {
                         <img
                             src={profileImage}
                             alt={name}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover -skew-y-3 scale-110"
                         />
                     </div>

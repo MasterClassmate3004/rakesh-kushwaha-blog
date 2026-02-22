@@ -38,21 +38,30 @@ export default function NavBar() {
             return
         }
 
+        const controller = new AbortController()
         setIsSearching(true)
         const timer = setTimeout(async () => {
             try {
-                const res = await fetch(`/api/search/posts?q=${encodeURIComponent(q)}`)
+                const res = await fetch(`/api/search/posts?q=${encodeURIComponent(q)}`, {
+                    signal: controller.signal,
+                    cache: "no-store",
+                })
                 const data = await res.json()
                 setResults(data.results || [])
             } catch (error) {
-                console.error("Search failed:", error)
-                setResults([])
+                if ((error as any)?.name !== "AbortError") {
+                    console.error("Search failed:", error)
+                    setResults([])
+                }
             } finally {
                 setIsSearching(false)
             }
         }, 220)
 
-        return () => clearTimeout(timer)
+        return () => {
+            clearTimeout(timer)
+            controller.abort()
+        }
     }, [searchQuery])
 
     useEffect(() => {

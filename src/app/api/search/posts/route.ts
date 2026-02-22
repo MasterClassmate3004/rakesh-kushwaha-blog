@@ -18,7 +18,7 @@ export async function GET(request: Request) {
                 {
                     OR: [
                         { title: { contains: q, mode: "insensitive" } },
-                        { content: { contains: q, mode: "insensitive" } },
+                        { caption: { contains: q, mode: "insensitive" } },
                     ],
                 },
             ],
@@ -28,7 +28,6 @@ export async function GET(request: Request) {
             slug: true,
             title: true,
             caption: true,
-            content: true,
             createdAt: true,
         },
         orderBy: { createdAt: "desc" },
@@ -40,7 +39,7 @@ export async function GET(request: Request) {
         slug: post.slug,
         title: post.title,
         createdAt: post.createdAt,
-        excerpt: (post.caption || post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()).slice(0, 120),
+        excerpt: (post.caption || post.title).slice(0, 120),
     }))
 
     return NextResponse.json({ results })

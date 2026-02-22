@@ -2,8 +2,9 @@
 
 import { useState, useRef, useTransition } from "react"
 import { updateProfileImage } from "@/app/actions/user"
-import { Camera, Check, X, LogOut, Upload } from "lucide-react"
+import { Camera, Check, X, LogOut, Upload, Moon, Sun } from "lucide-react"
 import { signOut } from "next-auth/react"
+import { useTheme } from "@/components/ThemeProvider"
 
 interface ProfileFormProps {
     user: {
@@ -15,6 +16,7 @@ interface ProfileFormProps {
 }
 
 export default function ProfileForm({ user }: ProfileFormProps) {
+    const { theme, toggleTheme } = useTheme()
     const [isEditing, setIsEditing] = useState(false)
     const [previewUrl, setPreviewUrl] = useState(user.image || "")
     const [isPending, startTransition] = useTransition()
@@ -60,6 +62,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                     <img
                         src={previewUrl || `https://api.dicebear.com/7.x/notionists/svg?seed=${user.name || 'User'}&backgroundColor=b6e3f4`}
                         alt="Profile"
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover"
                     />
                 </div>
@@ -125,6 +129,33 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                     <div className="space-y-1">
                         <label className="text-xs font-bold text-muted uppercase tracking-widest">Email Address</label>
                         <p className="text-white text-lg font-medium">{user.email}</p>
+                    </div>
+                </div>
+
+                <div className="glass-card p-5 rounded-2xl border border-white/10">
+                    <div className="flex items-center justify-between gap-3">
+                        <div>
+                            <p className="text-sm font-semibold text-white">Theme</p>
+                            <p className="text-xs text-muted">Switch between dark and light mode</p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={toggleTheme}
+                            className={`relative w-16 h-9 rounded-full transition-colors ${theme === "dark" ? "bg-primary/35" : "bg-primary/20"
+                                }`}
+                            aria-label="Toggle theme"
+                        >
+                            <span
+                                className={`absolute top-1 h-7 w-7 rounded-full bg-white shadow-md transition-all flex items-center justify-center ${theme === "dark" ? "left-8" : "left-1"
+                                    }`}
+                            >
+                                {theme === "dark" ? (
+                                    <Moon className="w-4 h-4 text-primary" />
+                                ) : (
+                                    <Sun className="w-4 h-4 text-primary" />
+                                )}
+                            </span>
+                        </button>
                     </div>
                 </div>
 

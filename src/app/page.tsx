@@ -2,6 +2,16 @@ import { prisma } from "@/lib/prisma"
 import PageTransition from "@/components/PageTransition"
 import HomeFeed from "@/components/HomeFeed"
 import LandingHero3D from "@/components/LandingHero3D"
+import { siteConfig } from "@/lib/site"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: siteConfig.description,
+  alternates: {
+    canonical: "/",
+  },
+}
 
 export const revalidate = 60
 
@@ -14,7 +24,16 @@ export default async function HomePage() {
         published: true,
         OR: [{ publishAt: null }, { publishAt: { lte: now } }],
       } as any,
-      orderBy: { createdAt: "desc" }
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        caption: true,
+        imageUrl: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: { createdAt: "desc" },
     })
   } catch (error) {
     console.error("Home page database connection failed during build/render:", error)
@@ -23,6 +42,37 @@ export default async function HomePage() {
 
   return (
     <PageTransition>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Person",
+                name: siteConfig.authorName,
+                url: siteConfig.siteUrl,
+              },
+              {
+                "@type": "Blog",
+                name: siteConfig.name,
+                description: siteConfig.description,
+                url: siteConfig.siteUrl,
+                author: {
+                  "@type": "Person",
+                  name: siteConfig.authorName,
+                },
+              },
+              {
+                "@type": "WebSite",
+                name: siteConfig.name,
+                url: siteConfig.siteUrl,
+              },
+            ],
+          }),
+        }}
+      />
       <LandingHero3D />
 
       {posts.length === 0 ? (
@@ -36,7 +86,6 @@ export default async function HomePage() {
             slug: post.slug,
             title: post.title,
             caption: post.caption,
-            content: post.content,
             imageUrl: post.imageUrl,
             createdAt: post.createdAt.toISOString(),
             updatedAt: post.updatedAt.toISOString(),

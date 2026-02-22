@@ -11,7 +11,6 @@ type FeedPost = {
     slug: string
     title: string
     caption?: string | null
-    content: string
     imageUrl?: string | null
     createdAt: string
     updatedAt?: string
@@ -41,7 +40,7 @@ export default function HomeFeed({ posts }: { posts: FeedPost[] }) {
         const q = query.trim().toLowerCase()
         if (!q) return posts
         return posts.filter((post) => {
-            const haystack = `${post.title} ${post.caption || ""} ${post.content}`.toLowerCase()
+            const haystack = `${post.title} ${post.caption || ""}`.toLowerCase()
             return haystack.includes(q)
         })
     }, [posts, query])

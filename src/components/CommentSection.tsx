@@ -118,6 +118,8 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
                                             <img
                                                 src={comment.author.image || `https://api.dicebear.com/7.x/notionists/svg?seed=${comment.author.name || 'User'}&backgroundColor=b6e3f4`}
                                                 alt={comment.author.name || "User"}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>

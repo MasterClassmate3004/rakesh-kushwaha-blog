@@ -34,6 +34,8 @@ export default function BlogCard({ slug, title, dateLabel, caption, imageUrl, im
                         <motion.img
                             src={resolvedImageUrl}
                             alt={title}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                     </div>
