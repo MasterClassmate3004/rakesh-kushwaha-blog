@@ -141,18 +141,22 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                         <button
                             type="button"
                             onClick={toggleTheme}
-                            className={`relative w-16 h-9 rounded-full transition-colors ${theme === "dark" ? "bg-primary/35" : "bg-primary/20"
+                            className={`relative w-16 h-9 rounded-full border transition-colors ${theme === "dark"
+                                    ? "bg-white border-white/80"
+                                    : "bg-slate-900 border-slate-700"
                                 }`}
                             aria-label="Toggle theme"
                         >
                             <span
-                                className={`absolute top-1 h-7 w-7 rounded-full bg-white shadow-md transition-all flex items-center justify-center ${theme === "dark" ? "left-8" : "left-1"
+                                className={`absolute top-1 h-7 w-7 rounded-full shadow-md transition-all flex items-center justify-center ${theme === "dark"
+                                        ? "left-8 bg-slate-900"
+                                        : "left-1 bg-white"
                                     }`}
                             >
                                 {theme === "dark" ? (
-                                    <Moon className="w-4 h-4 text-primary" />
+                                    <Moon className="w-4 h-4 text-white" />
                                 ) : (
-                                    <Sun className="w-4 h-4 text-primary" />
+                                    <Sun className="w-4 h-4 text-slate-900" />
                                 )}
                             </span>
                         </button>

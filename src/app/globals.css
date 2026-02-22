@@ -252,6 +252,36 @@
   color: #1565c0;
 }
 
+.search-results-dropdown {
+  background: #090b10;
+}
+
+.light .search-results-dropdown {
+  background: #ffffff;
+}
+
+.light .month-scrollbar {
+  scrollbar-color: rgba(41, 151, 255, 0.65) rgba(15, 23, 42, 0.12);
+}
+
+.light .month-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+}
+
+.light .month-scrollbar::-webkit-scrollbar-thumb {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.month-post-rail {
+  border-radius: 1.1rem;
+}
+
+.light .month-post-rail {
+  background: rgba(15, 23, 42, 0.04);
+  padding: 0.35rem;
+}
+
 .post-content .post-heading {
   font-size: clamp(1.8rem, 2.8vw, 2.4rem);
   line-height: 1.15;
