@@ -179,6 +179,10 @@
   color: #1976d2;
 }
 
+.light .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
 .light .post-content {
   color: #1f2937;
 }

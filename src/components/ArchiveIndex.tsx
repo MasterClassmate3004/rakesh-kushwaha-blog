@@ -53,7 +53,7 @@ export default function ArchiveIndex({ posts }: { posts: ArchivePost[] }) {
     return (
         <div className="space-y-6 md:space-y-8">
             <section className="glass-card rounded-3xl p-4 md:p-6 border border-white/10 md:sticky md:top-20 z-20">
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
+                <div className="flex items-center gap-3 rounded-2xl border border-slate-300/70 dark:border-white/10 bg-white/80 dark:bg-black/30 px-4 py-3">
                     <Search className="w-4 h-4 text-primary" />
                     <input
                         type="text"
