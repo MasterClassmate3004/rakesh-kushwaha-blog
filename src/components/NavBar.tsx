@@ -182,7 +182,7 @@ export default function NavBar() {
                                     onFocus={() => setIsSearchOpen(true)}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Search blogs..."
-                                    className="w-full bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none pr-3"
+                                    className="navbar-search-input w-full bg-transparent text-sm text-foreground dark:text-white placeholder:text-slate-500 dark:placeholder:text-white/40 focus:outline-none pr-3"
                                 />
                             </motion.div>
                         </motion.div>

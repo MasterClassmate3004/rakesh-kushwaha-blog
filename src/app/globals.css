@@ -260,6 +260,40 @@
   background: #ffffff;
 }
 
+.light .navbar-search-input {
+  color: #0f172a !important;
+  caret-color: #0f172a;
+}
+
+.light .navbar-search-input::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+.auth-input::placeholder {
+  opacity: 1;
+}
+
+.light .auth-input {
+  color: #0f172a !important;
+  caret-color: #0f172a;
+}
+
+.light .auth-input::placeholder {
+  color: #6b7280;
+}
+
+.dark .auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.light .auth-input:-webkit-autofill,
+.light .auth-input:-webkit-autofill:hover,
+.light .auth-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #0f172a;
+  transition: background-color 9999s ease-out 0s;
+}
+
 .light .month-scrollbar {
   scrollbar-color: rgba(41, 151, 255, 0.65) rgba(15, 23, 42, 0.12);
 }

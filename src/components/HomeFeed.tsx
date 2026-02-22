@@ -158,10 +158,10 @@ export default function HomeFeed({ posts }: { posts: FeedPost[] }) {
                                     )}
                                 </div>
 
-                                <div className="glass-card rounded-3xl p-5 md:p-6 border border-white/10">
-                                    <div className="month-post-rail flex gap-4 overflow-x-auto overflow-y-hidden pb-3 month-scrollbar snap-x snap-mandatory">
+                                <div className="glass-card rounded-3xl p-5 md:p-6 border border-white/10 md:w-[calc(100%+5rem)] md:-ml-10 lg:w-[calc(100%+8rem)] lg:-ml-16">
+                                    <div className="month-post-rail flex gap-3 overflow-x-auto overflow-y-hidden pb-3 month-scrollbar snap-x snap-mandatory">
                                         {activeGroup.posts.map((post) => (
-                                            <div key={post.id} className="w-[320px] sm:w-[360px] lg:w-[390px] shrink-0 snap-start">
+                                            <div key={post.id} className="w-[260px] sm:w-[280px] lg:w-[290px] shrink-0 snap-start">
                                                 <BlogCard
                                                     slug={post.slug}
                                                     title={post.title}
