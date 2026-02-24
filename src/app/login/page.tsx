@@ -16,25 +16,36 @@ export default function LoginPage() {
         setLoading(true)
         setError("")
 
-        const result = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-        })
+        try {
+            const result = await signIn("credentials", {
+                email,
+                password,
+                redirect: false,
+            })
 
-        if (result?.error) {
-            setError("Invalid email or password.")
-            setLoading(false)
-        } else {
-            // Check the session to see if we're an admin
-            const response = await fetch('/api/auth/session')
+            if (result?.error) {
+                setError("Invalid email or password.")
+                return
+            }
+
+            // Check the session to see if we're an admin.
+            const response = await fetch("/api/auth/session", { cache: "no-store" })
+            if (!response.ok) {
+                window.location.href = "/"
+                return
+            }
+
             const session = await response.json()
-
-            if (session?.user?.role === 'ADMIN') {
+            if (session?.user?.role === "ADMIN") {
                 window.location.href = "/admin"
             } else {
                 window.location.href = "/"
             }
+        } catch (err) {
+            console.error("Login flow failed:", err)
+            setError("Something went wrong. Please try again.")
+        } finally {
+            setLoading(false)
         }
     }
 

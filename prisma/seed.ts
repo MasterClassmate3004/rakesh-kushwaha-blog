@@ -15,7 +15,7 @@ async function main() {
             role: 'ADMIN',
         },
         create: {
-            name: 'Admin Author',
+            name: 'Rakesh Kushwaha',
             email,
             password: adminPassword,
             role: 'ADMIN',

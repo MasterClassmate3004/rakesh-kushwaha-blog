@@ -46,6 +46,10 @@ export default function NavBar() {
                     signal: controller.signal,
                     cache: "no-store",
                 })
+                if (!res.ok) {
+                    setResults([])
+                    return
+                }
                 const data = await res.json()
                 setResults(data.results || [])
             } catch (error) {

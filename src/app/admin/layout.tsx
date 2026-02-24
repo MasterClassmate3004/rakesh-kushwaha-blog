@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import Link from "next/link"
 import { LayoutDashboard, PenTool, CheckSquare } from "lucide-react"
 import SignOutButton from "@/components/SignOutButton"
+import { normalizeAuthorName } from "@/lib/names"
 
 export default async function AdminLayout({
     children,
@@ -21,7 +22,7 @@ export default async function AdminLayout({
                 <div className="glass-card rounded-2xl p-6 sticky top-24">
                     <div className="mb-8">
                         <h2 className="text-xl font-bold tracking-tight text-white mb-1">Admin Panel</h2>
-                        <p className="text-sm text-primary">Logged in as {(session.user as any).name}</p>
+                        <p className="text-sm text-primary">Logged in as {normalizeAuthorName((session.user as any).name)}</p>
                     </div>
 
                     <nav className="space-y-2">

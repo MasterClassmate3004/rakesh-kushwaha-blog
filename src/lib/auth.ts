@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import * as bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { authConfig } from "@/auth.config"
+import { normalizeAuthorName } from "@/lib/names"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     ...authConfig,
@@ -48,6 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (session.user) {
                 (session.user as any).role = token.role;
                 (session.user as any).id = token.id as string;
+                session.user.name = normalizeAuthorName(session.user.name);
             }
             return session;
         }
