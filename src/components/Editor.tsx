@@ -1,9 +1,27 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { savePost } from "@/app/actions/admin"
 import { useRouter } from "next/navigation"
-import { Heading2, Heading3, List, ListOrdered, Pilcrow, Quote, RemoveFormatting, SeparatorHorizontal, Type, Upload, X } from "lucide-react"
+import {
+    Bold,
+    Heading2,
+    Heading3,
+    ImagePlus,
+    Italic,
+    Link as LinkIcon,
+    List,
+    ListOrdered,
+    Pilcrow,
+    Quote,
+    Redo2,
+    SeparatorHorizontal,
+    Type,
+    Underline,
+    Undo2,
+    Upload,
+    X,
+} from "lucide-react"
 
 interface EditorProps {
     initialData?: {
@@ -33,73 +51,117 @@ export default function Editor({ initialData }: EditorProps) {
     const router = useRouter()
     const [title, setTitle] = useState(initialData?.title || "")
     const [caption, setCaption] = useState(initialData?.caption || "")
-    const [content, setContent] = useState(initialData?.content || "")
+    const [content, setContent] = useState(initialData?.content || "<p class=\"post-body\">Start writing your blog post...</p>")
     const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "")
     const [publishAt, setPublishAt] = useState(
         toInputDateTimeLocal(initialData?.publishAt) || toInputDateTimeLocal(initialData?.createdAt) || toInputDateTimeLocal(new Date())
     )
     const [isSaving, setIsSaving] = useState(false)
+    const [showHtmlSource, setShowHtmlSource] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    const inlineImageInputRef = useRef<HTMLInputElement>(null)
+    const editorRef = useRef<HTMLDivElement>(null)
     const publishAtRef = useRef<HTMLInputElement>(null)
+    const [isEditorFocused, setIsEditorFocused] = useState(false)
 
-    const insertAtCursor = (snippet: string) => {
-        const textarea = textAreaRef.current
-        if (!textarea) {
-            setContent((prev) => `${prev}${snippet}`)
+    const editorClasses = useMemo(() => {
+        return [
+            "editor-surface",
+            "post-content",
+            "prose",
+            "prose-invert",
+            "prose-lg",
+            "max-w-none",
+            "min-h-[420px]",
+            "rounded-xl",
+            "border",
+            "px-4",
+            "py-4",
+            "outline-none",
+            "transition-all",
+            isEditorFocused ? "border-primary/50 ring-2 ring-primary/30" : "border-white/10",
+            "bg-black/30",
+            "text-white",
+        ].join(" ")
+    }, [isEditorFocused])
+
+    const syncContentFromEditor = () => {
+        const html = editorRef.current?.innerHTML ?? ""
+        setContent(html)
+    }
+
+    const ensureEditorFocus = () => {
+        editorRef.current?.focus()
+    }
+
+    const runCommand = (command: string, value?: string) => {
+        ensureEditorFocus()
+        document.execCommand(command, false, value)
+        syncContentFromEditor()
+    }
+
+    const applyBlockStyle = (tagName: "P" | "H2" | "H3" | "BLOCKQUOTE", className: string) => {
+        runCommand("formatBlock", tagName)
+        const selection = window.getSelection()
+        if (!selection?.anchorNode) return
+
+        const anchorElement =
+            selection.anchorNode.nodeType === Node.ELEMENT_NODE
+                ? (selection.anchorNode as HTMLElement)
+                : selection.anchorNode.parentElement
+
+        const block = anchorElement?.closest(tagName.toLowerCase())
+        if (block) {
+            block.className = className
+            syncContentFromEditor()
+        }
+    }
+
+    const applyListStyle = (ordered: boolean) => {
+        runCommand(ordered ? "insertOrderedList" : "insertUnorderedList")
+        const selection = window.getSelection()
+        if (!selection?.anchorNode) return
+        const anchorElement =
+            selection.anchorNode.nodeType === Node.ELEMENT_NODE
+                ? (selection.anchorNode as HTMLElement)
+                : selection.anchorNode.parentElement
+        const list = anchorElement?.closest(ordered ? "ol" : "ul")
+        if (list) {
+            list.className = ordered ? "post-list-ordered" : "post-list"
+            syncContentFromEditor()
+        }
+    }
+
+    const insertLink = () => {
+        ensureEditorFocus()
+        const url = window.prompt("Enter URL (https://...)")
+        if (!url) return
+        runCommand("createLink", url)
+    }
+
+    const insertInlineImage = (dataUrl: string) => {
+        ensureEditorFocus()
+        runCommand("insertImage", dataUrl)
+    }
+
+    const handleInlineImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+        if (!file.type.startsWith("image/")) {
+            alert("Please upload a valid image file.")
+            return
+        }
+        if (file.size > 2 * 1024 * 1024) {
+            alert("Inline image must be under 2MB.")
             return
         }
 
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const before = content.slice(0, start)
-        const selected = content.slice(start, end)
-        const after = content.slice(end)
-        const next = `${before}${snippet}${selected}${after}`
-        setContent(next)
-
-        requestAnimationFrame(() => {
-            textarea.focus()
-            const cursor = start + snippet.length
-            textarea.setSelectionRange(cursor, cursor)
-        })
-    }
-
-    const wrapSelection = (openTag: string, closeTag: string, fallbackText: string) => {
-        const textarea = textAreaRef.current
-        if (!textarea) return
-
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const before = content.slice(0, start)
-        const selected = content.slice(start, end) || fallbackText
-        const after = content.slice(end)
-        const next = `${before}${openTag}${selected}${closeTag}${after}`
-        setContent(next)
-
-        requestAnimationFrame(() => {
-            textarea.focus()
-            const selStart = start + openTag.length
-            const selEnd = selStart + selected.length
-            textarea.setSelectionRange(selStart, selEnd)
-        })
-    }
-
-    const applyPreset = (preset: "heading" | "subheading" | "body" | "quote" | "callout" | "ul" | "ol" | "serif" | "mono" | "blue" | "muted") => {
-        const map = {
-            heading: () => wrapSelection('<h2 class="post-heading">', "</h2>", "Section Heading"),
-            subheading: () => wrapSelection('<h3 class="post-subheading">', "</h3>", "Subheading"),
-            body: () => wrapSelection('<p class="post-body">', "</p>", "Write your paragraph here."),
-            quote: () => wrapSelection('<blockquote class="post-quote">', "</blockquote>", "A meaningful quote."),
-            callout: () => wrapSelection('<div class="post-callout"><p class="post-body">', "</p></div>", "Helpful tip or important note."),
-            ul: () => insertAtCursor('\n<ul class="post-list">\n  <li>First point</li>\n  <li>Second point</li>\n</ul>\n'),
-            ol: () => insertAtCursor('\n<ol class="post-list-ordered">\n  <li>Step one</li>\n  <li>Step two</li>\n</ol>\n'),
-            serif: () => wrapSelection('<span class="post-font-serif">', "</span>", "Serif highlight"),
-            mono: () => wrapSelection('<span class="post-font-mono">', "</span>", "inline-code"),
-            blue: () => wrapSelection('<span class="post-color-blue">', "</span>", "accent text"),
-            muted: () => wrapSelection('<span class="post-color-muted">', "</span>", "secondary text"),
+        const reader = new FileReader()
+        reader.onloadend = () => {
+            insertInlineImage(reader.result as string)
         }
-        map[preset]()
+        reader.readAsDataURL(file)
+        e.target.value = ""
     }
 
     const handleImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,13 +191,19 @@ export default function Editor({ initialData }: EditorProps) {
             alert("Cover image is required.")
             return
         }
+        const latestContent = editorRef.current?.innerHTML?.trim() || content.trim()
+        if (!latestContent) {
+            alert("Post content is required.")
+            return
+        }
+
         setIsSaving(true)
 
         await savePost({
             id: initialData?.id,
             title,
             caption: caption || undefined,
-            content,
+            content: latestContent,
             imageUrl: imageUrl || undefined,
             published: true,
             scheduleAt: publishAt || undefined,
@@ -227,63 +295,101 @@ export default function Editor({ initialData }: EditorProps) {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted mb-2">Content (HTML allowed)</label>
+                    <label className="block text-sm font-medium text-muted mb-2">Content Editor</label>
                     <p className="text-xs text-muted/90 mb-2">
-                        Safe HTML tags are allowed. Use the preset toolbar for consistent Apple-style formatting. Unsafe tags/attributes are removed automatically.
+                        Format text directly like a normal editor. Your styles are shown live while writing.
                     </p>
                     <div className="glass-card rounded-2xl p-3 mb-3 border border-white/10">
                         <div className="flex flex-wrap gap-2">
-                            <button type="button" onClick={() => applyPreset("heading")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
-                                <Heading2 className="w-3.5 h-3.5" /> Heading
+                            <button type="button" onClick={() => runCommand("bold")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <Bold className="w-3.5 h-3.5" /> Bold
                             </button>
-                            <button type="button" onClick={() => applyPreset("subheading")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
-                                <Heading3 className="w-3.5 h-3.5" /> Subheading
+                            <button type="button" onClick={() => runCommand("italic")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <Italic className="w-3.5 h-3.5" /> Italic
                             </button>
-                            <button type="button" onClick={() => applyPreset("body")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                            <button type="button" onClick={() => runCommand("underline")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <Underline className="w-3.5 h-3.5" /> Underline
+                            </button>
+                            <button type="button" onClick={() => applyBlockStyle("P", "post-body")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                 <Pilcrow className="w-3.5 h-3.5" /> Paragraph
                             </button>
-                            <button type="button" onClick={() => applyPreset("quote")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                            <button type="button" onClick={() => applyBlockStyle("H2", "post-heading")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <Heading2 className="w-3.5 h-3.5" /> Heading
+                            </button>
+                            <button type="button" onClick={() => applyBlockStyle("H3", "post-subheading")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <Heading3 className="w-3.5 h-3.5" /> Subheading
+                            </button>
+                            <button type="button" onClick={() => applyBlockStyle("BLOCKQUOTE", "post-quote")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                 <Quote className="w-3.5 h-3.5" /> Quote
                             </button>
-                            <button type="button" onClick={() => applyPreset("ul")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                            <button type="button" onClick={() => applyListStyle(false)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                 <List className="w-3.5 h-3.5" /> Bullets
                             </button>
-                            <button type="button" onClick={() => applyPreset("ol")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                            <button type="button" onClick={() => applyListStyle(true)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                 <ListOrdered className="w-3.5 h-3.5" /> Numbered
                             </button>
-                            <button type="button" onClick={() => applyPreset("callout")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
-                                <Type className="w-3.5 h-3.5" /> Callout
+                            <button type="button" onClick={insertLink} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <LinkIcon className="w-3.5 h-3.5" /> Link
                             </button>
-                            <button type="button" onClick={() => insertAtCursor("\n<hr class=\"post-divider\" />\n")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                            <button type="button" onClick={() => runCommand("unlink")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <X className="w-3.5 h-3.5" /> Unlink
+                            </button>
+                            <button type="button" onClick={() => runCommand("insertHorizontalRule")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                 <SeparatorHorizontal className="w-3.5 h-3.5" /> HR
                             </button>
-                            <button type="button" onClick={() => insertAtCursor("<br />")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
-                                <RemoveFormatting className="w-3.5 h-3.5" /> BR
+                            <button type="button" onClick={() => runCommand("insertLineBreak")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                <Type className="w-3.5 h-3.5" /> BR
                             </button>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-white/10">
-                            <button type="button" onClick={() => applyPreset("serif")} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25">
-                                Serif
+                            <button type="button" onClick={() => inlineImageInputRef.current?.click()} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25 flex items-center gap-1.5">
+                                <ImagePlus className="w-3.5 h-3.5" /> Insert Image
                             </button>
-                            <button type="button" onClick={() => applyPreset("mono")} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25">
-                                Mono
+                            <button type="button" onClick={() => runCommand("undo")} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25 flex items-center gap-1.5">
+                                <Undo2 className="w-3.5 h-3.5" /> Undo
                             </button>
-                            <button type="button" onClick={() => applyPreset("blue")} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25">
-                                Accent Blue
-                            </button>
-                            <button type="button" onClick={() => applyPreset("muted")} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25">
-                                Muted
+                            <button type="button" onClick={() => runCommand("redo")} className="px-3 py-1.5 rounded-lg text-xs bg-primary/15 text-primary hover:bg-primary/25 flex items-center gap-1.5">
+                                <Redo2 className="w-3.5 h-3.5" /> Redo
                             </button>
                         </div>
                     </div>
-                    <textarea
-                        ref={textAreaRef}
-                        required
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[400px] font-mono text-sm transition-all resize-y"
-                        placeholder="<p>Write your amazing blog post here...</p>"
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={inlineImageInputRef}
+                        onChange={handleInlineImageFile}
+                        className="hidden"
                     />
+                    <div
+                        ref={editorRef}
+                        contentEditable
+                        suppressContentEditableWarning
+                        className={editorClasses}
+                        onInput={syncContentFromEditor}
+                        onFocus={() => setIsEditorFocused(true)}
+                        onBlur={() => setIsEditorFocused(false)}
+                        dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                    <div className="mt-3">
+                        <button
+                            type="button"
+                            onClick={() => setShowHtmlSource((prev) => !prev)}
+                            className="text-xs text-primary hover:underline"
+                        >
+                            {showHtmlSource ? "Hide HTML source" : "Show HTML source (advanced)"}
+                        </button>
+                        {showHtmlSource && (
+                            <textarea
+                                value={content}
+                                onChange={(e) => {
+                                    const next = e.target.value
+                                    setContent(next)
+                                    if (editorRef.current) {
+                                        editorRef.current.innerHTML = next
+                                    }
+                                }}
+                                className="mt-2 w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white min-h-[180px] font-mono text-xs focus:outline-none focus:ring-2 focus:ring-primary/50"
+                            />
+                        )}
+                    </div>
                 </div>
 
             </div>

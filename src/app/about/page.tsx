@@ -64,7 +64,7 @@ export default async function AboutAuthorPage() {
                         I am also the author of the novel <strong>Unrequited Love</strong>, born from my belief that the human heart can be as complex and fascinating as any mathematical problem.
                     </p>
                     <p>
-                        Through this platform, I share my thoughts, reflections, and insights through blogs. Here, I write about ideas, experiences, and perspectives that connect education, life, and personal growth—creating a space for learning beyond textbooks.
+                        Through this platform, I share my thoughts, reflections, and insights through blogs. Here, I write about ideas, experiences, and perspectives that connect education, life, and personal growth, creating a space for learning beyond textbooks.
                     </p>
 
                     <div className="pt-8 border-t border-white/10 flex justify-center md:justify-start space-x-8">

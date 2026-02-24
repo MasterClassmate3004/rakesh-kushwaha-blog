@@ -252,6 +252,37 @@
   color: #1565c0;
 }
 
+.editor-surface {
+  line-height: 1.8;
+}
+
+.editor-surface:empty:before {
+  content: "Start writing your post...";
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.editor-surface img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 0.8rem 0;
+}
+
+.editor-surface a {
+  color: #2997ff;
+  text-decoration: underline;
+}
+
+.light .editor-surface {
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+.light .editor-surface:empty:before {
+  color: #6b7280;
+}
+
 .search-results-dropdown {
   background: #090b10;
 }
