@@ -95,7 +95,7 @@ export default function NavBar() {
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 <div className="h-14 flex items-center justify-between md:hidden">
                     <Link href="/" className="text-lg md:text-xl font-bold tracking-tight shrink-0">
-                        Nitya's <span className="text-primary">Blog</span>
+                        Rakesh's <span className="text-primary">Blog</span>
                     </Link>
 
                     <div className="md:hidden flex items-center gap-2">
@@ -144,7 +144,7 @@ export default function NavBar() {
                         transition={{ type: "spring", stiffness: 280, damping: 26 }}
                     >
                         <Link href="/" className="text-xl font-bold tracking-tight">
-                            Nitya's <span className="text-primary">Blog</span>
+                            Rakesh's <span className="text-primary">Blog</span>
                         </Link>
                     </motion.div>
                     <div
