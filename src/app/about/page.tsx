@@ -49,13 +49,16 @@ export default async function AboutAuthorPage() {
                     </div>
                     <div className="text-center md:text-left">
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{name}</h1>
-                        <p className="text-xl text-primary font-medium">Software Engineer & Creative Designer</p>
+                        <p className="text-xl text-primary font-medium">Passionate Teacher and Author</p>
                     </div>
                 </div>
 
                 <div className="glass-card p-10 rounded-[2.5rem] space-y-8 text-neutral-300 leading-relaxed text-lg border-white/5">
                     <p>
-                        I am {name} Founder of Mathivation Research Lab which was formerly Mathivation HUB and an author. Teaching has never been just a profession for me, it has always been a lifelong passion. With Master's degrees in Mathematics, English, Linguistics, and Economics, along with Bachelor's degrees in Special Education and Information Technology, I have devoted more than three decades to the world of education.
+                        I am {name} <strong>Founder of Mathivation Research Lab</strong> and an <strong>author</strong>. Teaching has never been just a profession for me, it has always been a lifelong passion.
+                    </p>
+                    <p>
+                        With Master's degrees in Mathematics, English, Linguistics, and Economics, along with Bachelor's degrees in Special Education and Information Technology, I have devoted more than three decades to the world of education.
                     </p>
                     <p>
                         I am also the author of the novel <strong>Unrequited Love</strong>, born from my belief that the human heart can be as complex and fascinating as any mathematical problem.
