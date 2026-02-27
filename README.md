@@ -58,8 +58,8 @@ Create a `.env` file in the root:
 ```env
 DATABASE_URL="file:./dev.db"
 AUTH_SECRET="your-secret-here"
-ADMIN_EMAIL="admin@blog.local"
-ADMIN_PASSWORD="admin123"
+ADMIN_EMAIL="email for admin"
+ADMIN_PASSWORD="password for admin"
 ```
 
 ### 4. Run Development Server
