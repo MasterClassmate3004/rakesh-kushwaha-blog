@@ -16,7 +16,7 @@ export default async function EditPostPage(props: { params: Promise<{ id: string
         <div className="space-y-8">
             <div>
                 <h1 className="text-3xl font-extrabold tracking-tight mb-2">Edit Post</h1>
-                <p className="text-muted">Update your existing post content.</p>
+                <p className="text-muted">Refine your draft with live preview, outline navigation, and quick formatting tools.</p>
             </div>
             <Editor initialData={post} />
         </div>

@@ -33,7 +33,7 @@ export async function updateCommentStatus(commentId: string, status: "APPROVED" 
     revalidatePath("/") // revalidate everywhere just in case
 }
 
-export async function savePost(data: { id?: string, title: string, caption?: string, content: string, imageUrl?: string, published: boolean, scheduleAt?: string }) {
+export async function savePost(data: { id?: string, title: string, caption?: string, content: string, imageUrl?: string | null, published: boolean, scheduleAt?: string }) {
     await requireAdmin()
 
     const baseSlug = data.title
@@ -62,11 +62,7 @@ export async function savePost(data: { id?: string, title: string, caption?: str
         publishAtForPost = null
     }
 
-    let normalizedImageUrl = data.imageUrl?.trim()
-
-    if (!normalizedImageUrl) {
-        throw new Error("Cover image is required")
-    }
+    const normalizedImageUrl = data.imageUrl?.trim() || ""
 
     if (normalizedImageUrl) {
         if (normalizedImageUrl.startsWith("data:")) {
@@ -86,9 +82,11 @@ export async function savePost(data: { id?: string, title: string, caption?: str
         } else if (!/^https:\/\//i.test(normalizedImageUrl)) {
             throw new Error("Only HTTPS image URLs are allowed")
         }
-    } else {
-        normalizedImageUrl = undefined
+    } else if (data.published) {
+        throw new Error("Cover image is required to publish")
     }
+
+    const imageUrlForPost = normalizedImageUrl || null
 
     let slug = baseSlug
     let suffix = 1
@@ -106,7 +104,7 @@ export async function savePost(data: { id?: string, title: string, caption?: str
             caption: normalizedCaption,
             slug,
             content: sanitizedContent,
-            imageUrl: normalizedImageUrl,
+            imageUrl: imageUrlForPost,
             published: data.published,
             publishAt: publishAtForPost,
             ...(createdAtForPost ? { createdAt: createdAtForPost } : {}),
@@ -116,7 +114,7 @@ export async function savePost(data: { id?: string, title: string, caption?: str
             caption: normalizedCaption,
             slug,
             content: sanitizedContent,
-            imageUrl: normalizedImageUrl,
+            imageUrl: imageUrlForPost,
             published: data.published,
             publishAt: publishAtForPost,
             ...(createdAtForPost ? { createdAt: createdAtForPost } : {}),
