@@ -42,6 +42,9 @@ const ALLOWED_CLASSES = new Set([
     "post-font-mono",
     "post-color-blue",
     "post-color-muted",
+    "post-line-tight",
+    "post-line-normal",
+    "post-line-relaxed",
 ])
 
 export function sanitizeHtml(input: string): string {

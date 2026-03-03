@@ -1,8 +1,7 @@
 export const siteConfig = {
-  name: "Rakesh Kushwaha Blogs",
-  shortName: "Rakesh Kushwaha Blog",
-  description:
-    "Rakesh Kushwaha's official blog on software engineering, design systems, and product building.",
+  name: "Rakesh's Blog",
+  shortName: "Rakesh's Blog",
+  description: "Teaching life one lesson at a time.",
   authorName: "Rakesh Kushwaha",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL
     ? process.env.NEXT_PUBLIC_SITE_URL

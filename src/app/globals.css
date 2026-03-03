@@ -431,3 +431,15 @@
 .post-content .post-color-muted {
   color: #9ca3af;
 }
+
+.post-content .post-line-tight {
+  line-height: 1.45;
+}
+
+.post-content .post-line-normal {
+  line-height: 1.7;
+}
+
+.post-content .post-line-relaxed {
+  line-height: 2;
+}
