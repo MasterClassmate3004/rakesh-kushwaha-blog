@@ -283,12 +283,31 @@
   color: #6b7280;
 }
 
+/* Search dropdown theming (force light vs dark) */
 .search-results-dropdown {
-  background: #090b10;
+  background: #ffffff !important;
+  color: #000000 !important;
 }
 
-.light .search-results-dropdown {
-  background: #ffffff;
+.search-results-dropdown p {
+  color: #000000 !important;
+}
+
+.search-results-dropdown .text-muted {
+  color: #000000 !important;
+}
+
+.dark .search-results-dropdown {
+  background: #090b10 !important;
+  color: #f8fafc !important;
+}
+
+.dark .search-results-dropdown p {
+  color: #f8fafc !important;
+}
+
+.dark .search-results-dropdown .text-muted {
+  color: rgba(255, 255, 255, 0.82) !important;
 }
 
 .light .navbar-search-input {
@@ -442,4 +461,21 @@
 
 .post-content .post-line-relaxed {
   line-height: 2;
+}
+.search-results-dropdown a {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.search-results-dropdown a:hover {
+  background: #f1f5f9 !important;
+}
+
+.dark .search-results-dropdown a {
+  background: #11151f !important;
+  color: #f8fafc !important;
+}
+
+.dark .search-results-dropdown a:hover {
+  background: #171c29 !important;
 }

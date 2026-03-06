@@ -198,11 +198,11 @@ export default function NavBar() {
                                 className="search-results-dropdown absolute top-12 left-0 w-full rounded-2xl p-2.5 border border-slate-200 bg-white shadow-[0_20px_40px_rgba(15,23,42,0.12)] dark:border-white/15 dark:bg-[#090b10] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
                             >
                                 {searchQuery.trim().length < 2 ? (
-                                    <p className="text-xs text-muted px-2 py-3">Type at least 2 characters to search posts.</p>
+                                    <p className="text-xs text-black dark:text-neutral-200 px-2 py-3">Type at least 2 characters to search posts.</p>
                                 ) : isSearching ? (
-                                    <p className="text-xs text-muted px-2 py-3">Searching...</p>
+                                    <p className="text-xs text-black dark:text-neutral-200 px-2 py-3">Searching...</p>
                                 ) : results.length === 0 ? (
-                                    <p className="text-xs text-muted px-2 py-3">No matching posts found.</p>
+                                    <p className="text-xs text-black dark:text-neutral-200 px-2 py-3">No matching posts found.</p>
                                 ) : (
                                     <div className="space-y-1">
                                         {results.map((result) => (
@@ -212,7 +212,7 @@ export default function NavBar() {
                                                 className="block p-3 rounded-xl transition-colors border bg-white hover:bg-slate-100 border-slate-200 dark:bg-[#11151f] dark:hover:bg-[#171c29] dark:border-white/5"
                                             >
                                                 <p className="text-sm font-semibold text-black dark:text-white">{result.title}</p>
-                                                <p className="text-xs text-black/70 dark:text-neutral-300 mt-1 line-clamp-2">{result.excerpt}</p>
+                                                <p className="text-xs text-black dark:text-neutral-300 mt-1 line-clamp-2">{result.excerpt}</p>
                                             </Link>
                                         ))}
                                     </div>
