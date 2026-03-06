@@ -211,8 +211,8 @@ export default function NavBar() {
                                                 href={`/blog/${result.slug}`}
                                                 className="block p-3 rounded-xl transition-colors border bg-white hover:bg-slate-100 border-slate-200 dark:bg-[#11151f] dark:hover:bg-[#171c29] dark:border-white/5"
                                             >
-                                                <p className="text-sm font-semibold text-slate-900 dark:text-white">{result.title}</p>
-                                                <p className="text-xs text-slate-600 dark:text-neutral-300 mt-1 line-clamp-2">{result.excerpt}</p>
+                                                <p className="text-sm font-semibold text-black dark:text-white">{result.title}</p>
+                                                <p className="text-xs text-black/70 dark:text-neutral-300 mt-1 line-clamp-2">{result.excerpt}</p>
                                             </Link>
                                         ))}
                                     </div>
