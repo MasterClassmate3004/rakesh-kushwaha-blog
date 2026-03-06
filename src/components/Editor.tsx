@@ -944,7 +944,8 @@ export default function Editor({ initialData }: EditorProps) {
                                         />
                                     )}
                                 </div>
-                            </div>
+                            </section>
+                        </div>
                     </div>
 
                     <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -973,6 +974,7 @@ export default function Editor({ initialData }: EditorProps) {
                             </button>
                         </div>
                     </div>
-                </form>
-                )
+                </div>
+            </form>
+        )
 }
