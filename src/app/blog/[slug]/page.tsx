@@ -9,6 +9,7 @@ import BlogCard from "@/components/BlogCard"
 import { formatDateDDMMYYYY } from "@/lib/date"
 import type { Metadata } from "next"
 import { siteConfig } from "@/lib/site"
+import ReadingProgressBar from "@/components/ReadingProgressBar"
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const params = await props.params
@@ -106,12 +107,13 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
 
     return (
         <PageTransition>
+            <ReadingProgressBar targetId="blog-post-article" />
             <Link href="/" className="inline-flex items-center text-primary hover:text-white transition-colors mb-10 group mt-4">
                 <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                 Back to all posts
             </Link>
 
-            <article className="max-w-3xl mx-auto">
+            <article id="blog-post-article" className="max-w-3xl mx-auto">
                 <header className="mb-14 text-center">
                     <p className="text-sky-300 font-medium tracking-wide mb-2" suppressHydrationWarning>
                         {formatDateDDMMYYYY(post.createdAt, true)} • {readMinutes} min read

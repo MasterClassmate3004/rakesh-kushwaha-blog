@@ -252,6 +252,26 @@
   color: #1565c0;
 }
 
+.reading-progress-shell {
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.reading-progress-bar {
+  background: linear-gradient(90deg, #2997ff 0%, #70b8ff 45%, #ffffff 100%);
+  box-shadow: 0 0 16px rgba(41, 151, 255, 0.45);
+  transition: width 120ms ease-out;
+}
+
+.light .reading-progress-shell {
+  background: rgba(15, 23, 42, 0.06);
+  box-shadow: inset 0 -1px 0 rgba(15, 23, 42, 0.08);
+}
+
+.light .reading-progress-bar {
+  background: linear-gradient(90deg, #1976d2 0%, #2997ff 50%, #8fd1ff 100%);
+  box-shadow: 0 0 12px rgba(25, 118, 210, 0.22);
+}
+
 .editor-surface {
   line-height: 1.8;
 }
