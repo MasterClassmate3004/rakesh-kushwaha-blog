@@ -944,37 +944,38 @@ export default function Editor({ initialData }: EditorProps) {
                                         />
                                     )}
                                 </div>
-                            </section>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <button
-                            type="button"
-                            onClick={handleCancel}
-                            className="px-6 py-3 rounded-xl font-medium text-white hover:bg-white/10 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <div className="flex items-center gap-3">
-                            <button
-                                type="button"
-                                onClick={() => void persistPost("draft")}
-                                disabled={!!saveMode}
-                                className="px-6 py-3 rounded-xl font-semibold bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-60"
-                            >
-                                {saveMode === "draft" ? "Saving Draft..." : "Save Draft"}
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={!!saveMode}
-                                className="bg-primary text-white font-semibold px-8 py-3 rounded-xl shadow-lg shadow-primary/25 disabled:opacity-60 transition-colors"
-                            >
-                                {saveMode === "publish" ? (isFuturePublish ? "Scheduling..." : "Publishing...") : publishButtonLabel}
-                            </button>
-                        </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
-            </form>
-        )
+
+                <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="px-6 py-3 rounded-xl font-medium text-white hover:bg-white/10 transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => void persistPost("draft")}
+                            disabled={!!saveMode}
+                            className="px-6 py-3 rounded-xl font-semibold bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-60"
+                        >
+                            {saveMode === "draft" ? "Saving Draft..." : "Save Draft"}
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={!!saveMode}
+                            className="bg-primary text-white font-semibold px-8 py-3 rounded-xl shadow-lg shadow-primary/25 disabled:opacity-60 transition-colors"
+                        >
+                            {saveMode === "publish" ? (isFuturePublish ? "Scheduling..." : "Publishing...") : publishButtonLabel}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    )
 }
