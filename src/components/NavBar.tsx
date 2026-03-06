@@ -195,7 +195,7 @@ export default function NavBar() {
                             <motion.div
                                 initial={{ opacity: 0, y: -8 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="search-results-dropdown absolute top-12 left-0 w-full rounded-2xl p-2.5 border border-slate-300/70 dark:border-white/15 bg-white dark:bg-[#090b10] shadow-[0_20px_40px_rgba(15,23,42,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                                className="search-results-dropdown absolute top-12 left-0 w-full rounded-2xl p-2.5 border border-slate-200 bg-white shadow-[0_20px_40px_rgba(15,23,42,0.12)] dark:border-white/15 dark:bg-[#090b10] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
                             >
                                 {searchQuery.trim().length < 2 ? (
                                     <p className="text-xs text-muted px-2 py-3">Type at least 2 characters to search posts.</p>
