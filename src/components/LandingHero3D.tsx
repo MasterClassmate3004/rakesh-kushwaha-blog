@@ -16,7 +16,7 @@ export default function LandingHero3D() {
                         Thoughts & Ideas
                     </h1>
                     <p className="text-muted max-w-2xl text-base md:text-lg">
-                        Exploring software engineering, design patterns, and building premium user experiences.
+                        Teaching life, one lesson at a time. Amalgamated with reality, logic and passion!
                     </p>
                 </div>
             </motion.div>
