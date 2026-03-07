@@ -34,7 +34,7 @@ export default function HomeFeed({ posts }: { posts: FeedPost[] }) {
     const [query, setQuery] = useState("")
     const [activeIndex, setActiveIndex] = useState(0)
     const [direction, setDirection] = useState(1)
-    const wheelLockRef = useRef(false)
+    const lastWheelAtRef = useRef(0)
 
     const filteredPosts = useMemo(() => {
         const q = query.trim().toLowerCase()
@@ -76,13 +76,11 @@ export default function HomeFeed({ posts }: { posts: FeedPost[] }) {
             event.preventDefault()
 
             if (groupedPosts.length <= 1) return
-            if (wheelLockRef.current) return
             if (Math.abs(event.deltaY) < 10) return
 
-            wheelLockRef.current = true
-            window.setTimeout(() => {
-                wheelLockRef.current = false
-            }, 320)
+            const now = Date.now()
+            if (now - lastWheelAtRef.current < 700) return
+            lastWheelAtRef.current = now
 
             const nextDirection: 1 | -1 = event.deltaY > 0 ? -1 : 1
             setDirection(nextDirection)
