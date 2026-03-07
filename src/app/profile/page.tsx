@@ -12,9 +12,14 @@ export default async function ProfilePage() {
     }
 
     // Fetch the latest user data from the database to avoid stale session data
-    const dbUser = await prisma.user.findUnique({
-        where: { id: (session.user as any).id }
-    })
+    let dbUser = null
+    try {
+        dbUser = await prisma.user.findUnique({
+            where: { id: (session.user as any).id }
+        })
+    } catch (error) {
+        console.error("Profile page database connection failed:", error)
+    }
 
     if (!dbUser) {
         redirect("/login")

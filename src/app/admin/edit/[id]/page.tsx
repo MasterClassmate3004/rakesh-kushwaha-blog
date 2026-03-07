@@ -4,9 +4,14 @@ import { notFound } from "next/navigation"
 
 export default async function EditPostPage(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
-    const post = await prisma.post.findUnique({
-        where: { id: params.id }
-    })
+    let post = null
+    try {
+        post = await prisma.post.findUnique({
+            where: { id: params.id }
+        })
+    } catch (error) {
+        console.error("Edit page database connection failed:", error)
+    }
 
     if (!post) {
         notFound()

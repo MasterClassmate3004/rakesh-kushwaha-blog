@@ -6,14 +6,19 @@ import { formatDateDDMMYYYY } from "@/lib/date"
 
 export default async function AdminDashboard() {
     const now = new Date()
-    const posts = await prisma.post.findMany({
-        orderBy: { createdAt: "desc" },
-        include: {
-            _count: {
-                select: { comments: true }
+    let posts: any[] = []
+    try {
+        posts = await prisma.post.findMany({
+            orderBy: { createdAt: "desc" },
+            include: {
+                _count: {
+                    select: { comments: true }
+                }
             }
-        }
-    })
+        })
+    } catch (error) {
+        console.error("Admin dashboard database connection failed:", error)
+    }
 
     // Quick stats
     const totalPosts = posts.length

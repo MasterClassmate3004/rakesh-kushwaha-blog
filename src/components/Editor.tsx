@@ -882,7 +882,7 @@ export default function Editor({ initialData }: EditorProps) {
                                         <button type="button" onClick={() => applyListStyle(true)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                             <ListOrdered className="w-3.5 h-3.5" /> Numbered
                                         </button>
-                                        <button type="button" onClick={insertLink} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
+                                        <button type="button" onClick={openLinkInput} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">
                                             <LinkIcon className="w-3.5 h-3.5" /> Link
                                         </button>
                                         <button type="button" onClick={() => runCommand("unlink")} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 flex items-center gap-1.5">

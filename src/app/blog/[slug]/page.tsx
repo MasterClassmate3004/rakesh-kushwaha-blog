@@ -13,16 +13,21 @@ import ReadingProgressBar from "@/components/ReadingProgressBar"
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const params = await props.params
-    const post = await prisma.post.findUnique({
-        where: { slug: params.slug },
-        select: {
-            title: true,
-            caption: true,
-            content: true,
-            imageUrl: true,
-            published: true,
-        },
-    })
+    let post: any = null
+    try {
+        post = await prisma.post.findUnique({
+            where: { slug: params.slug },
+            select: {
+                title: true,
+                caption: true,
+                content: true,
+                imageUrl: true,
+                published: true,
+            },
+        })
+    } catch (error) {
+        console.error("Metadata fetch failed:", error)
+    }
 
     if (!post || !post.published) {
         return {
@@ -60,47 +65,57 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 export default async function BlogPostPage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
     const now = new Date()
-    const post = await prisma.post.findFirst({
-        where: {
-            slug: params.slug,
-            published: true,
-            OR: [{ publishAt: null }, { publishAt: { lte: now } }],
-        } as any,
-        include: {
-            comments: {
-                where: { status: "APPROVED", parentId: null } as any,
-                orderBy: { createdAt: "desc" } as any,
-                include: {
-                    author: {
-                        select: { name: true, image: true } as any
-                    },
-                    replies: {
-                        where: { status: "APPROVED" } as any,
-                        orderBy: { createdAt: "asc" } as any,
-                        include: {
-                            author: {
-                                select: { name: true, image: true } as any
-                            }
-                        } as any
-                    } as any,
-                }
+    let post: any = null
+    try {
+        post = await prisma.post.findFirst({
+            where: {
+                slug: params.slug,
+                published: true,
+                OR: [{ publishAt: null }, { publishAt: { lte: now } }],
+            } as any,
+            include: {
+                comments: {
+                    where: { status: "APPROVED", parentId: null } as any,
+                    orderBy: { createdAt: "desc" } as any,
+                    include: {
+                        author: {
+                            select: { name: true, image: true } as any
+                        },
+                        replies: {
+                            where: { status: "APPROVED" } as any,
+                            orderBy: { createdAt: "asc" } as any,
+                            include: {
+                                author: {
+                                    select: { name: true, image: true } as any
+                                }
+                            } as any
+                        } as any,
+                    }
+                } as any
             } as any
-        } as any
-    }) as any
+        })
+    } catch (error) {
+        console.error("Post fetch failed:", error)
+    }
 
     if (!post) {
         notFound()
     }
 
-    const recommendedPosts = await prisma.post.findMany({
-        where: {
-            published: true,
-            slug: { not: post.slug },
-            OR: [{ publishAt: null }, { publishAt: { lte: now } }],
-        } as any,
-        orderBy: { createdAt: "desc" },
-        take: 3,
-    })
+    let recommendedPosts: any[] = []
+    try {
+        recommendedPosts = await prisma.post.findMany({
+            where: {
+                published: true,
+                slug: { not: post.slug },
+                OR: [{ publishAt: null }, { publishAt: { lte: now } }],
+            } as any,
+            orderBy: { createdAt: "desc" },
+            take: 3,
+        })
+    } catch (error) {
+        console.error("Recommended posts fetch failed:", error)
+    }
 
     const cleanContent = sanitizeHtml(post.content || "")
     const readMinutes = Math.max(1, Math.ceil(cleanContent.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length / 200))

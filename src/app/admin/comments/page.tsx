@@ -3,14 +3,19 @@ import { updateCommentStatus } from "@/app/actions/admin"
 import { Check, X } from "lucide-react"
 
 export default async function CommentsModerationPage() {
-    const comments = await prisma.comment.findMany({
-        where: { status: "PENDING" },
-        include: {
-            post: { select: { title: true } },
-            author: { select: { name: true, email: true } }
-        },
-        orderBy: { createdAt: "asc" }
-    })
+    let comments: any[] = []
+    try {
+        comments = await prisma.comment.findMany({
+            where: { status: "PENDING" },
+            include: {
+                post: { select: { title: true } },
+                author: { select: { name: true, email: true } }
+            },
+            orderBy: { createdAt: "asc" }
+        })
+    } catch (error) {
+        console.error("Comments moderation DB connection failed:", error)
+    }
 
     return (
         <div className="space-y-8">
