@@ -332,6 +332,13 @@ export default function Editor({ initialData }: EditorProps) {
         return () => window.clearTimeout(timer)
     }, [statusMessage])
 
+    useEffect(() => {
+        if (!editorRef.current) return
+        if (editorRef.current.innerHTML !== content) {
+            editorRef.current.innerHTML = content
+        }
+    }, [content])
+
     const syncContentFromEditor = () => {
         const html = editorRef.current?.innerHTML ?? ""
         setContent(html)
@@ -920,7 +927,6 @@ export default function Editor({ initialData }: EditorProps) {
                                     onInput={syncContentFromEditor}
                                     onFocus={() => setIsEditorFocused(true)}
                                     onBlur={() => setIsEditorFocused(false)}
-                                    dangerouslySetInnerHTML={{ __html: content }}
                                 />
                                 <div className="mt-3">
                                     <button
