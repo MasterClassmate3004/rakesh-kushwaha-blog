@@ -27,7 +27,7 @@ export default async function AboutAuthorPage() {
     }
 
     const name = normalizeAuthorName(author?.name)
-    const profileImage = (author as any)?.image || `https://api.dicebear.com/7.x/notionists/svg?seed=${name}&backgroundColor=b6e3f4`
+    const profileImage = (author as any)?.image || "/logo.png"
 
     return (
         <PageTransition>
@@ -38,13 +38,13 @@ export default async function AboutAuthorPage() {
                 </Link>
 
                 <div className="flex flex-col md:flex-row items-center gap-10 mb-16">
-                    <div className="w-48 h-48 rounded-[2.5rem] overflow-hidden border-2 border-white/10 shadow-2xl skew-y-3">
+                    <div className="w-64 md:w-80 h-32 md:h-40 rounded-3xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center bg-black">
                         <img
                             src={profileImage}
                             alt={name}
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-full object-cover -skew-y-3 scale-110"
+                            className="w-full h-full object-cover scale-150"
                         />
                     </div>
                     <div className="text-center md:text-left">

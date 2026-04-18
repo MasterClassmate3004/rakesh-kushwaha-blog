@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "Rakesh's Blog",
-  shortName: "Rakesh's Blog",
+  name: "Mathivation Research Lab",
+  shortName: "Mathivation Research Lab",
   description: "Teaching life one lesson at a time.",
   authorName: "Rakesh Kushwaha",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL

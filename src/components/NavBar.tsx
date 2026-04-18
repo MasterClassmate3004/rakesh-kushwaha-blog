@@ -26,7 +26,7 @@ export default function NavBar() {
 
     const navLinks = [
         { name: "Home", href: "/" },
-        { name: "Archive", href: "/archive" },
+        { name: "Portfolio", href: "/portfolio" },
         { name: "About Author", href: "/about" },
     ]
 
@@ -93,9 +93,9 @@ export default function NavBar() {
             className="fixed top-0 left-0 right-0 z-50 glass"
         >
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                <div className="h-14 flex items-center justify-between md:hidden">
-                    <Link href="/" className="text-lg md:text-xl font-bold tracking-tight shrink-0">
-                        Rakesh's <span className="text-primary">Blog</span>
+                <div className="h-20 flex items-center justify-between md:hidden">
+                    <Link href="/" className="flex items-center gap-2 shrink-0 pl-1">
+                        <img src="/logo.png" alt="Mathivation Research Lab" className="h-16 w-auto object-contain mix-blend-screen scale-[1.75] origin-left pointer-events-none" />
                     </Link>
 
                     <div className="md:hidden flex items-center gap-2">
@@ -138,93 +138,15 @@ export default function NavBar() {
                     </nav>
                 </div>
 
-                <div className="hidden md:flex h-16 items-center justify-center">
-                    <motion.div
-                        animate={{ x: isSearchOpen ? -24 : 0 }}
-                        transition={{ type: "spring", stiffness: 280, damping: 26 }}
-                    >
-                        <Link href="/" className="text-xl font-bold tracking-tight">
-                            Rakesh's <span className="text-primary">Blog</span>
+                <div className="hidden md:flex h-24 items-center justify-between flex-1">
+                    <motion.div>
+                        <Link href="/" className="flex items-center shrink-0 pl-3 py-3">
+                            <img src="/logo.png" alt="Mathivation Research Lab" className="h-24 w-auto object-contain mix-blend-screen scale-[2.25] origin-left pointer-events-none" />
                         </Link>
                     </motion.div>
-                    <div
-                        ref={searchWrapRef}
-                        className="relative hidden sm:block ml-6"
-                        onMouseEnter={() => setIsSearchOpen(true)}
-                        onMouseLeave={() => {
-                            if (!searchQuery.trim()) setIsSearchOpen(false)
-                        }}
-                    >
-                        <motion.div
-                            animate={{
-                                width: isSearchOpen ? 300 : 36,
-                            }}
-                            transition={{ type: "spring", stiffness: 260, damping: 26 }}
-                            className={`h-10 rounded-full flex items-center overflow-hidden ${isSearchOpen
-                                ? "bg-white/5 border border-white/10"
-                                : "bg-transparent border border-transparent"
-                                }`}
-                        >
-                            <button
-                                type="button"
-                                onClick={() => setIsSearchOpen((prev) => !prev)}
-                                className="w-9 h-9 flex items-center justify-center text-primary shrink-0"
-                                aria-label="Search blog posts"
-                            >
-                                <Search className="w-4 h-4" />
-                            </button>
-                            <motion.div
-                                animate={{
-                                    width: isSearchOpen ? "100%" : 0,
-                                    opacity: isSearchOpen ? 1 : 0,
-                                }}
-                                transition={{ duration: 0.18 }}
-                                className="overflow-hidden"
-                            >
-                                <input
-                                    value={searchQuery}
-                                    onFocus={() => setIsSearchOpen(true)}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search blogs..."
-                                    className="navbar-search-input w-full bg-transparent text-sm text-foreground dark:text-white placeholder:text-slate-500 dark:placeholder:text-white/40 focus:outline-none pr-3"
-                                />
-                            </motion.div>
-                        </motion.div>
-
-                        {isSearchOpen && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="search-results-dropdown absolute top-12 left-0 w-full rounded-2xl p-2.5 border border-slate-200 bg-white shadow-[0_20px_40px_rgba(15,23,42,0.12)] dark:border-white/15 dark:bg-[#090b10] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
-                            >
-                                {searchQuery.trim().length < 2 ? (
-                                    <p className="text-xs text-black dark:text-neutral-200 px-2 py-3">Type at least 2 characters to search posts.</p>
-                                ) : isSearching ? (
-                                    <p className="text-xs text-black dark:text-neutral-200 px-2 py-3">Searching...</p>
-                                ) : results.length === 0 ? (
-                                    <p className="text-xs text-black dark:text-neutral-200 px-2 py-3">No matching posts found.</p>
-                                ) : (
-                                    <div className="space-y-1">
-                                        {results.map((result) => (
-                                            <Link
-                                                key={result.id}
-                                                href={`/blog/${result.slug}`}
-                                                className="block p-3 rounded-xl transition-colors border bg-white hover:bg-slate-100 border-slate-200 dark:bg-[#11151f] dark:hover:bg-[#171c29] dark:border-white/5"
-                                            >
-                                                <p className="text-sm font-semibold text-black dark:text-white">{result.title}</p>
-                                                <p className="text-xs text-black dark:text-neutral-300 mt-1 line-clamp-2">{result.excerpt}</p>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                )}
-                            </motion.div>
-                        )}
-                    </div>
 
                     <motion.nav
-                        className="flex items-center space-x-6 ml-6"
-                        animate={{ x: isSearchOpen ? 24 : 0 }}
-                        transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                        className="flex items-center space-x-6 ml-auto"
                     >
 
                         {navLinks.map((link) => {

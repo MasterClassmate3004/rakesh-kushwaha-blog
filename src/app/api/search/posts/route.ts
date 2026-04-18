@@ -35,7 +35,7 @@ export async function GET(request: Request) {
             take: 6,
         })
 
-        const results = posts.map((post) => ({
+        const results = posts.map((post: any) => ({
             id: post.id,
             slug: post.slug,
             title: post.title,
