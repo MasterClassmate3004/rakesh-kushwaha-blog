@@ -27,7 +27,7 @@ export default async function AboutAuthorPage() {
     }
 
     const name = normalizeAuthorName(author?.name)
-    const profileImage = (author as any)?.image || "/logo.png"
+    const profileImage = "/logo.png"
 
     return (
         <PageTransition>
